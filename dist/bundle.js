@@ -10,7 +10,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 window.calcRT = function (ev) {
 	var stats = (0, _readingTime2.default)(ev.value).text;
 
-	document.getElementById("readingTime").innerText = stats;
+	document.getElementById("readingTime").innerText = stats + 'thanh';
 };
 
 },{"reading-time":2}],2:[function(require,module,exports){
