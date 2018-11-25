@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+<div>Test 1</div>
+<div>
+    <div>Test 2</div>
+    <p>Paragraph1</p>
+    <p>Paragraph 2
+        <img src="https://www.google.com.vn/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></img>
+    </p>
+</div>
+</body>
+<script>
+    var postMessageDebugger = {
+        init: function() {
+            console.log("postMessageDebugger activated");
+            addEventListener("message", function(event) {
+                //console.log(window.location + " received '" + event.data + "' from " + event.origin)
+            });
+        }
+    };
+
+    postMessageDebugger.init();
+</script>
+</html>
