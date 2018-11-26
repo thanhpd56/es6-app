@@ -1,10 +1,24 @@
-import frametalk from 'frametalk'
 import $ from 'jquery';
 
 class ElementSelectorHandler {
     constructor(props) {
         console.log('Init element selector handler');
     }
+
+    addElementOverlay = () => {
+        $('body').append('' +
+            '<div class="insElem" id="insElemOverlay"></div>' +
+            '<div class="insElem" id="insElemBorderLeft"></div>' +
+            '<div class="insElem" id="insElemBorderRight"></div>' +
+            '<div class="insElem" id="insElemBorderTop"></div>' +
+            '<div class="insElem" id="insElemBorderBottom"></div>' +
+            '').append('' +
+            '<div id="insElemShowLeft"></div>' +
+            '<div id="insElemShowRight"></div>' +
+            '<div id="insElemShowTop"></div>' +
+            '<div id="insElemShowBottom"></div>' +
+            '');
+    };
 
     setEventHandler() {
         window.document.addEventListener('click', this.clickHandler, true);

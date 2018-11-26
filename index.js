@@ -1,5 +1,5 @@
 import readingTime from "reading-time";
-import frametalk from 'frametalk';
+import pm from 'post-robot';
 import $ from 'jquery';
 
 $(document).ready(function () {
@@ -9,8 +9,8 @@ $(document).ready(function () {
 
     $('li').eq(1).click(function () {
         $('#myid').addClass('highlight');
-    })
-    frametalk.send($('#edit-frame')[0].contentWindow, 'setEditMode', {mode: 'edit'})
+    });
+    pm.send($('#edit-frame')[0].contentWindow, 'setEditMode');
 });
 
 window.calcRT = ev => {

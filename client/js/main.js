@@ -1,10 +1,11 @@
 import $ from 'jquery';
-import frametalk from 'frametalk';
+import pm from 'post-robot';
 import elementSelectorHandler from './elementSelectorHandler';
 
 $(document).ready(function () {
     console.log('frame is ready');
-    frametalk.on('setEditMode', (event, data) => {
+    pm.on('setEditMode', (event, data) => {
+        elementSelectorHandler.addElementOverlay();
         elementSelectorHandler.setEventHandler();
     });
 });
