@@ -4,12 +4,31 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "build": "browserify ./js/main.js -o dist/bundle.js",
+    "watch": "watchify ./js/main.js -o dist/bundle.js -v"
   },
   "dependencies": {
     "express": "^4.16.4"
   },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "nodemon": "^1.18.6"
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^8.0.0",
+    "browserify": "^16.2.2",
+    "nodemon": "^1.18.6",
+    "watchify": "^3.11.0"
   }
 }
