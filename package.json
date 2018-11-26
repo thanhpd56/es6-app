@@ -11,6 +11,21 @@
     "type": "git",
     "url": "git+ssh://git@github.com/BalasubramaniM/es6-app.git"
   },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "env"
+          ],
+          "plugins": [
+            "transform-class-properties"
+          ]
+        }
+      ]
+    ]
+  },
   "keywords": [
     "es6",
     "npm",
@@ -32,6 +47,9 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^8.0.0"
   }
