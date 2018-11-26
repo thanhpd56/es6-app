@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Test</title>
+    <link rel="stylesheet" href="css/elementHandler.css">
     <script type="text/javascript" src="dist/bundle.js"></script>
+
 </head>
 <body>
 <div>Test 1</div>
@@ -13,6 +15,14 @@
     <p>Paragraph 2
         <img src="https://www.google.com.vn/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"></img>
     </p>
+    <div class="insElem" id="insElemBorderLeft" style="display: none; top: 170px; left: 587.391px; height: 390px;"></div>
+    <div class="insElem" id="insElemBorderRight" style="display: none; top: 170px; left: 1248.39px; height: 390px;"></div>
+    <div class="insElem" id="insElemBorderTop" style="display: none; top: 168px; left: 587.391px; width: 663px;"></div>
+    <div class="insElem" id="insElemBorderBottom" style="display: none; top: 560px; left: 587.391px; width: 663px;"></div>
+    <div id="insElemShowLeft" style="display: none;"></div>
+    <div id="insElemShowRight" style="display: none;"></div>
+    <div id="insElemShowTop" style="display: none;"></div>
+    <div id="insElemShowBottom" style="display: none;"></div>
 </div>
 </body>
 <script>
@@ -20,7 +30,7 @@
         init: function() {
             console.log("postMessageDebugger activated");
             addEventListener("message", function(event) {
-                //console.log(window.location + " received '" + event.data + "' from " + event.origin)
+                console.log(window.location + " received '" + event.data + "' from " + event.origin)
             });
         }
     };

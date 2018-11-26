@@ -17,18 +17,6 @@
     "browserify",
     "watchify"
   ],
-  "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "presets": [
-            "es2015"
-          ]
-        }
-      ]
-    ]
-  },
   "author": "Balasubramani M",
   "license": "ISC",
   "bugs": {

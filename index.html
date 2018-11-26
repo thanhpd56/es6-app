@@ -7,6 +7,7 @@
     <title>ES6 - App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/elementHandler.css">
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <script type="text/javascript" src="dist/bundle.js"></script>
 </head>
@@ -30,4 +31,16 @@
     </section>
 </body>
 
+<script>
+    var postMessageDebugger = {
+        init: function() {
+            console.log("postMessageDebugger activated");
+            addEventListener("message", function(event) {
+                console.log(window.location + " received '" + event.data + "' from " + event.origin)
+            });
+        }
+    };
+
+    postMessageDebugger.init();
+</script>
 </html>

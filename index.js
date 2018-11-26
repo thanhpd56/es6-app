@@ -10,7 +10,8 @@ $(document).ready(function () {
     $('li').eq(1).click(function () {
         $('#myid').addClass('highlight');
     })
-})
+    frametalk.send($('#edit-frame')[0].contentWindow, 'setEditMode', {mode: 'edit'})
+});
 
 window.calcRT = ev => {
 	var stats = readingTime(ev.value).text;

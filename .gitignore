@@ -17,3 +17,4 @@ build
 .env
 npm-debug.log
 /client/dist/bundle.js
+/dist/bundle.js
