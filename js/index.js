@@ -16,7 +16,12 @@ $(document).ready(function () {
     pm.on('elementSelected', event => {
         const selectedElement = event.data;
         elementSelectorHandler.handleElementSelected(selectedElement);
-        console.log(event);
+    });
+
+    pm.on('setCustomMenu', event => {
+        console.log('show custom menu');
+        const selectedElement = event.data;
+        elementSelectorHandler.setCustomMenu(selectedElement);
     })
 });
 

@@ -327,6 +327,8 @@ class ElementSelectorHandler {
         elementData.height = $(element).outerHeight();
         elementData.width = $(element).outerWidth();
         elementData.tagName = elementTagName;
+        elementData.parents = this.getAllParents(element);
+        elementData.children = this.getAllChildren(element);
         elementData.attrs = this.getElementAttributes(element);
         elementData.cssSettings = this.getCssSettings(elementData.selectorString);
 
@@ -374,6 +376,7 @@ class ElementSelectorHandler {
         });
 
         pm.send(window.parent, 'elementSelected', elementData);
+        pm.send(window.parent, 'setCustomMenu', elementData);
         console.log(elementData);
     };
 
@@ -443,7 +446,32 @@ class ElementSelectorHandler {
             }
         }
         return styles;
-    }
+    };
+
+    getAllParents = (element) => {
+        const parents = [];
+        for (; element && element.nodeType === Node.ELEMENT_NODE; element = element.parentNode) {
+            const parent = {};
+            parent.selectorString = this.getElementTreeSelector(element);
+            parent.tagName = element.tagName;
+            parents.push(parent);
+        }
+        return parents;
+    };
+
+    getAllChildren = (element) => {
+        const children = [];
+        const eleChildren = $(element).children();
+        let i = 0, j = eleChildren.length;
+        for (; i < j; i++) {
+            const elemChild = eleChildren[i];
+            const child = {};
+            child.selectorString = this.getElementTreeSelector(elemChild);
+            child.tagName = elemChild.tagName;
+            children.push(child);
+        }
+        return children;
+    };
 }
 
 export default new ElementSelectorHandler()
