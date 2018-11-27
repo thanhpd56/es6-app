@@ -1,6 +1,50 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ElementSelectorHandler = function ElementSelectorHandler() {
+    var _this = this;
+
+    _classCallCheck(this, ElementSelectorHandler);
+
+    this.addOverlay = function () {
+        _this.selectElementOverlay = (0, _jquery2.default)('<div/>', {
+            id: 'selectElementOverlay'
+        }).appendTo('body');
+    };
+
+    this.handleElementSelected = function (selectedElement) {
+        _this.selectedElement = selectedElement;
+        _this.pageOverlay();
+    };
+
+    this.pageOverlay = function () {
+        console.log('show overlay');
+        _this.selectElementOverlay.show();
+    };
+
+    console.log('init main element selector handler');
+    this.selectElementOverlay = (0, _jquery2.default)('<div/>', {
+        id: 'selectElementOverlay'
+    }).appendTo('body');
+};
+
+exports.default = new ElementSelectorHandler();
+
+},{"jquery":3}],2:[function(require,module,exports){
+'use strict';
+
 var _readingTime = require('reading-time');
 
 var _readingTime2 = _interopRequireDefault(_readingTime);
@@ -13,6 +57,10 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _elementSelectorHandler = require('./elementSelectorHandler');
+
+var _elementSelectorHandler2 = _interopRequireDefault(_elementSelectorHandler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _jquery2.default)(document).ready(function () {
@@ -24,7 +72,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         (0, _jquery2.default)('#myid').addClass('highlight');
     });
     _postRobot2.default.send((0, _jquery2.default)('#edit-frame')[0].contentWindow, 'setEditMode');
+    _elementSelectorHandler2.default.addOverlay();
     _postRobot2.default.on('elementSelected', function (event) {
+        var selectedElement = event.data;
+        _elementSelectorHandler2.default.handleElementSelected(selectedElement);
         console.log(event);
     });
 });
@@ -35,7 +86,7 @@ window.calcRT = function (ev) {
     document.getElementById("readingTime").innerText = stats + 'thanh';
 };
 
-},{"jquery":2,"post-robot":4,"reading-time":5}],2:[function(require,module,exports){
+},{"./elementSelectorHandler":1,"jquery":3,"post-robot":5,"reading-time":6}],3:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
@@ -10401,7 +10452,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (global){
 !function(root, factory) {
     "object" == typeof exports && "object" == typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define("postRobot", [], factory) : "object" == typeof exports ? exports.postRobot = factory() : root.postRobot = factory();
@@ -12603,7 +12654,7 @@ return jQuery;
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /* @flow */
 
 // eslint-disable-next-line import/no-commonjs
@@ -12612,10 +12663,10 @@ module.exports = require('./dist/post-robot');
 // eslint-disable-next-line import/no-commonjs
 module.exports.default = module.exports;
 
-},{"./dist/post-robot":3}],5:[function(require,module,exports){
+},{"./dist/post-robot":4}],6:[function(require,module,exports){
 module.exports = require('./lib/reading-time');
 
-},{"./lib/reading-time":6}],6:[function(require,module,exports){
+},{"./lib/reading-time":7}],7:[function(require,module,exports){
 /*!
  * reading-time
  * Copyright (c) Nicolas Gryman <ngryman@gmail.com>
@@ -12673,4 +12724,4 @@ function readingTime(text, options) {
  */
 module.exports = readingTime
 
-},{}]},{},[1]);
+},{}]},{},[2]);
