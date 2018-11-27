@@ -21,5 +21,6 @@ function setupListeners() {
 
 $(document).ready(function () {
     console.log('frame is ready');
+    elementMoveHandler.setElementSelectEventHandler = elementSelectorHandler.setEventHandler;
     setupListeners();
 });

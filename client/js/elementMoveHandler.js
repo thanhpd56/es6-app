@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'jquery-ui';
+import pm from 'post-robot';
 
 class ElementMoveHandler {
     constructor(){
@@ -10,7 +11,7 @@ class ElementMoveHandler {
         };
         this.zIndexValues = {'movableElement': 2147483642, 'movableOverlay': 2147483645};
         this.selectedMovableElement = null;
-
+        this.elementOldSettings = null;
     }
 
     getSelector = (alias, justName) => {
@@ -35,8 +36,22 @@ class ElementMoveHandler {
         this.setEvents();
     };
 
-    setEvents = function () {
+    setEvents = () => {
+        $(this.getSelector('cancelMove')).off('click').on('click', () => {
+            this.stopMove();
+            pm.send(window.parent, 'setElementMovedPosition', this.getMovedPosition());
+        });
+    };
 
+    getMovedPosition = () => {
+        const data = {oldPosition: this.elementOldSettings, newPosition: this.getElementCssSettings(this.selectedMovableElement)};
+        data.editUrl = window.location.href;
+        return data;
+    };
+
+    stopMove = () => {
+        $(this.getSelector('moveHelperOverlay')).draggable('destroy').resizable('destroy').hide();
+        this.setElementSelectEventHandler();
     };
 
     getElementCssSettings = (element) => {
@@ -53,7 +68,7 @@ class ElementMoveHandler {
 
     prepareForMove = (selectedElement) => {
         this.selectedMovableElement = $(selectedElement.selectorString);
-        const elementOldSettings = this.getElementCssSettings(this.selectedMovableElement);
+        this.elementOldSettings = this.getElementCssSettings(this.selectedMovableElement);
         this.removeMoveHelpers();
         this.appendMoveHelpers();
         this.selectedMovableElement.css('position', 'static');
@@ -70,12 +85,6 @@ class ElementMoveHandler {
             'z-index': this.zIndexValues['movableElement'],
             'max-width': 'none'
         });
-        /*$(this.getSelector('moveHelperOverlay')).adjustHelper({
-            top: 0,
-            left: 0,
-            width: 0,
-            height: 0
-        }, this.selectedMovableElement);*/
         this.prepareMovableOverlay();
     };
 
