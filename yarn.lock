@@ -1451,11 +1451,6 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-frametalk@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/frametalk/-/frametalk-0.1.3.tgz#d525dd49552796f000038e7c2a5b98641ccfbfc6"
-  integrity sha512-dbVrrEt5wu5lnoejKJO3yQ66o8I+U7U2rz+oOFx1k3IkcUjG5y93xGp4gOZTY58ARorOzKB597/+vJQHYnWvXg==
-
 fs-minipass@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-1.2.5.tgz#06c277218454ec288df77ada54a03b8702aacb9d"
@@ -1883,10 +1878,15 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
-jquery@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
+jquery-ui@1.10.5:
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.10.5.tgz#826aed3dd1f88d32ae75d74df48643dc431a5815"
+  integrity sha1-gmrtPdH4jTKudddN9IZD3EMaWBU=
+
+jquery@2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
+  integrity sha1-LInWiJterFIqfuoywUUhVZxsvwI=
 
 "js-tokens@^3.0.0 || ^4.0.0":
   version "4.0.0"

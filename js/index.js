@@ -6,6 +6,7 @@ import elementSelectorHandler from './elementSelectorHandler';
 function initElements() {
     elementSelectorHandler.addOverlay();
     elementSelectorHandler.clickEvents();
+    elementSelectorHandler.setEvents();
 }
 
 function setupListeners() {

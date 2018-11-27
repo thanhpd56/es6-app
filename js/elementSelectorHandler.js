@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'jquery-ui';
 
 class ElementSelectorHandler {
     constructor() {
@@ -217,7 +218,25 @@ class ElementSelectorHandler {
 
     removeMenu = () => {
         $('#select-element-menu').hide();
-    }
+    };
+
+    setEvents = () => {
+        const container = $('body');
+
+        // element select menu draggable
+        $('#select-element-menu').draggable({
+            handle: '.select-element-menu-handle',
+            create: function () {
+                $('#select-element-menu').css({'position': 'absolute'});
+            }
+        });
+
+        container.on('click', '#selectElementOverlay', () => {
+            this.removeMenu();
+            this.removeOverlay();
+        });
+    };
+
 }
 
 export default new ElementSelectorHandler();
