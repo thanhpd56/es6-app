@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import pm from 'post-robot';
 
 class ElementSelectorHandler {
     constructor() {
@@ -371,6 +372,8 @@ class ElementSelectorHandler {
             width: elementData.width,
             height: elementData.height
         });
+
+        pm.send(window.parent, 'elementSelected', elementData);
         console.log(elementData);
     };
 
@@ -423,9 +426,9 @@ class ElementSelectorHandler {
         const attrs = [];
         if (el.length > 0) {
             el = el[0];
-            let i = 0, attrs = el.attributes, n = attrs.length;
+            let i = 0, atts = el.attributes, n = atts.length, arr = [];
             for (; i < n; i++) {
-                attrs.push({'attr': attrs[i].nodeName, 'val': attrs[i].nodeValue});
+                attrs.push({'attr': atts[i].nodeName, 'val': atts[i].nodeValue});
             }
         }
         return attrs;

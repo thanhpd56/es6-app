@@ -11,6 +11,9 @@ $(document).ready(function () {
         $('#myid').addClass('highlight');
     });
     pm.send($('#edit-frame')[0].contentWindow, 'setEditMode');
+    pm.on('elementSelected', event => {
+        console.log(event);
+    })
 });
 
 window.calcRT = ev => {
