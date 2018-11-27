@@ -24,6 +24,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         (0, _jquery2.default)('#myid').addClass('highlight');
     });
     _postRobot2.default.send((0, _jquery2.default)('#edit-frame')[0].contentWindow, 'setEditMode');
+    _postRobot2.default.on('elementSelected', function (event) {
+        console.log(event);
+    });
 });
 
 window.calcRT = function (ev) {
