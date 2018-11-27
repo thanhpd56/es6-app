@@ -15,16 +15,21 @@ function setupListeners() {
         elementSelectorHandler.handleElementSelected(selectedElement);
     });
     pm.on('setCustomMenu', event => {
-        console.log('show custom menu');
         const selectedElement = event.data;
         elementSelectorHandler.setCustomMenu(selectedElement);
-    })
+    });
+
+    pm.on('removePageOverlay', () => elementSelectorHandler.removeOverlay());
+
+    pm.on('removeMenu', elementSelectorHandler.removeMenu);
 }
 
 $(document).ready(function () {
+    let pmTarget = $('#edit-frame')[0].contentWindow;
+    elementSelectorHandler.pmTarget = pmTarget;
     initElements();
     setupListeners();
-    pm.send($('#edit-frame')[0].contentWindow, 'setEditMode');
+    pm.send(pmTarget, 'setEditMode');
 });
 
 window.calcRT = ev => {

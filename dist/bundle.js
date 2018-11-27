@@ -28,6 +28,7 @@ var ElementSelectorHandler = function ElementSelectorHandler() {
 
     this.removeOverlay = function () {
         _this.selectElementOverlay.hide();
+        _postRobot2.default.send(_this.pmTarget, 'removeElemOverlay');
     };
 
     this.handleElementSelected = function (selectedElement) {
@@ -248,10 +249,15 @@ function setupListeners() {
         _elementSelectorHandler2.default.handleElementSelected(selectedElement);
     });
     _postRobot2.default.on('setCustomMenu', function (event) {
-        console.log('show custom menu');
         var selectedElement = event.data;
         _elementSelectorHandler2.default.setCustomMenu(selectedElement);
     });
+
+    _postRobot2.default.on('removePageOverlay', function () {
+        return _elementSelectorHandler2.default.removeOverlay();
+    });
+
+    _postRobot2.default.on('removeMenu', _elementSelectorHandler2.default.removeMenu);
 }
 
 (0, _jquery2.default)(document).ready(function () {

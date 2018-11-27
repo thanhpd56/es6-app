@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "express": "^4.16.4",
-    "post-robot": "^9.0.12"
+    "post-robot": "^9.0.12",
+    "jquery": "2.2.4",
+    "jquery-ui": "1.10.5"
   },
   "browserify": {
     "transform": [

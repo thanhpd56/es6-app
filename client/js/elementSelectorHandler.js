@@ -424,6 +424,14 @@ class ElementSelectorHandler {
         $('#insElemShowBottom').hide();
     };
 
+    removeElemOverlay = function () {
+        $('#insElemBorderLeft').hide();
+        $('#insElemBorderRight').hide();
+        $('#insElemBorderTop').hide();
+        $('#insElemBorderBottom').hide();
+        $('#insElemOverlay').hide();
+    };
+
     getElementAttributes = (selectorString) => {
         let el = $(selectorString);
         const attrs = [];
@@ -471,6 +479,11 @@ class ElementSelectorHandler {
             children.push(child);
         }
         return children;
+    };
+
+    unsetEventHandlers  = () => {
+        document.removeEventListener('click', this.clickHandler, true);
+        document.removeEventListener('mouseover', this.overHandler, true);
     };
 }
 
