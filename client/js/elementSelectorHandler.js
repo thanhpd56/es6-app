@@ -254,10 +254,11 @@ class ElementSelectorHandler {
             '');
     };
 
-    setEventHandler() {
+    setEventHandler = () => {
+        console.log('set event handler di may');
         window.document.addEventListener('click', this.clickHandler, true);
         window.document.addEventListener('mouseover', this.overHandler, true);
-    }
+    };
 
     getElementTreeSelector = function (element) {
         const paths = [];
@@ -307,6 +308,7 @@ class ElementSelectorHandler {
     };
 
     clickHandler = (event) => {
+        console.log('clicked');
         const elementTagName = event.target.tagName.toLowerCase();
         const element = event.target;
 
@@ -482,6 +484,7 @@ class ElementSelectorHandler {
     };
 
     unsetEventHandlers  = () => {
+        console.log('unset event handler roi ha');
         document.removeEventListener('click', this.clickHandler, true);
         document.removeEventListener('mouseover', this.overHandler, true);
     };

@@ -13,7 +13,7 @@ class Main {
     }
 
     setupListeners = () => {
-        pm.on('setEditMode', (event, data) => {
+        pm.on('setEditMode', () => {
             elementSelectorHandler.addElementOverlay();
             elementSelectorHandler.setEventHandler();
         });

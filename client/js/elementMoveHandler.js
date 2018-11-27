@@ -12,6 +12,7 @@ class ElementMoveHandler {
         this.zIndexValues = {'movableElement': 2147483642, 'movableOverlay': 2147483645};
         this.selectedMovableElement = null;
         this.elementOldSettings = null;
+        this.setElementSelectEventHandler = null;
     }
 
     getSelector = (alias, justName) => {
@@ -52,6 +53,9 @@ class ElementMoveHandler {
     stopMove = () => {
         $(this.getSelector('moveHelperOverlay')).draggable('destroy').resizable('destroy').hide();
         this.setElementSelectEventHandler();
+        window.document.addEventListener('click', () => {
+            console.log('click roi');
+        }, true);
     };
 
     getElementCssSettings = (element) => {
