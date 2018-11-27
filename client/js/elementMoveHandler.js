@@ -128,6 +128,11 @@ class ElementMoveHandler {
         });
         $('.ui-resizable-handle').addClass('movable-resize-handler');
     };
+
+    setMovePosition = (customization) => {
+        $(customization.selectorString).css(customization.newPosition);
+        return customization;
+    };
 }
 
 export default new ElementMoveHandler();

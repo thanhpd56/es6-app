@@ -26,6 +26,10 @@ class Main {
             elementMoveHandler.prepareForMove(selectedElement);
         });
         pm.on('removeElemOverlay', elementSelectorHandler.removeElemOverlay);
+
+        pm.on('setMovePosition', (event) => {
+            elementMoveHandler.setMovePosition(event.data);
+        });
     }
 }
 
