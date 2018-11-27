@@ -3,7 +3,7 @@ import pm from 'post-robot';
 import elementSelectorHandler from './elementSelectorHandler';
 import elementMoveHandler from './elementMoveHandler';
 
-class Customization {
+class Main {
     constructor(){
         $(document).ready(() => {
             console.log('frame is ready');
@@ -29,4 +29,4 @@ class Customization {
     }
 }
 
-export default new Customization();
+export default new Main();
