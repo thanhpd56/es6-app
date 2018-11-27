@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 class ElementSelectorHandler {
-    constructor(props) {
+    constructor() {
         console.log('Init element selector handler');
         this.exceptTags = ['html', 'body'];
         this.selectedElement = {};
@@ -275,15 +275,17 @@ class ElementSelectorHandler {
                 if (sibling.nodeName === element.nodeName)
                     hasFollowingSiblings = true;
             }
+            let tagName;
+            let pathIndex;
             if (element.id.length > 0 && element.nodeName !== 'BODY') {
-                var tagName = (element.prefix ? element.prefix + ":" : "") + element.localName;
-                var pathIndex = '#' + element.id;
+                tagName = (element.prefix ? element.prefix + ":" : "") + element.localName;
+                pathIndex = '#' + element.id;
                 paths.splice(0, 0, tagName + pathIndex);
                 break;
             }
             else {
-                var tagName = (element.prefix ? element.prefix + ":" : "") + element.localName;
-                var pathIndex = (index || hasFollowingSiblings ? ":eq(" + (index) + ")" : "");
+                tagName = (element.prefix ? element.prefix + ":" : "") + element.localName;
+                pathIndex = (index || hasFollowingSiblings ? ":eq(" + (index) + ")" : "");
                 paths.splice(0, 0, tagName + pathIndex);
             }
         }
@@ -318,7 +320,6 @@ class ElementSelectorHandler {
         if (this.elementIsBorder(event.target)) {
             return false;
         }
-        const highlightedElementID = $(this.getElementTreeSelector(element)).attr('id');
         const elementData = {};
         elementData.selectorString = this.getElementTreeSelector(element);
         elementData.offset = $(element).offset();
@@ -371,13 +372,24 @@ class ElementSelectorHandler {
             height: elementData.height
         });
         console.log(elementData);
-    }
+    };
 
 
     overHandler = (event) => {
         const elementTagName = event.target.tagName.toLowerCase();
         const element = event.target;
-        this.removeShowedElementBorder()
+        if (this.elementIsExceptional(event.target)) {
+            return false;
+        }
+
+        if (this.elementIsBorder(event.target)) {
+            return false;
+        }
+        if (this.exceptTags.indexOf(elementTagName) > -1) {
+            return false;
+        }
+
+        this.removeShowedElementBorder();
         const elemOffset = $(element).offset();
         const elemHeight = $(element).outerHeight();
         const elemWidth = $(element).outerWidth();
@@ -411,9 +423,9 @@ class ElementSelectorHandler {
         const attrs = [];
         if (el.length > 0) {
             el = el[0];
-            let i = 0, atts = el.attributes, n = atts.length, arr = [];
+            let i = 0, attrs = el.attributes, n = attrs.length;
             for (; i < n; i++) {
-                attrs.push({'attr': atts[i].nodeName, 'val': atts[i].nodeValue});
+                attrs.push({'attr': attrs[i].nodeName, 'val': attrs[i].nodeValue});
             }
         }
         return attrs;
