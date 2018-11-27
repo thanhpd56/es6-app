@@ -2,6 +2,7 @@ import $ from 'jquery';
 import pm from 'post-robot';
 import elementSelectorHandler from './elementSelectorHandler';
 import elementMoveHandler from './elementMoveHandler';
+import helper from './helper';
 
 class Main {
     constructor(){
@@ -30,7 +31,19 @@ class Main {
         pm.on('setMovePosition', (event) => {
             elementMoveHandler.setMovePosition(event.data);
         });
-    }
+
+        pm.on('removeElement', (event) => {
+            this.removeElement(event.data);
+        });
+    };
+
+    removeElement = (data) => {
+        if (typeof data.editUrl === "undefined") {
+            data.editUrl = helper.getCurrentUrl();
+        }
+        $(data.selectorString).hide();
+        return data;
+    };
 }
 
 export default new Main();

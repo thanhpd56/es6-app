@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'jquery-ui';
 import pm from 'post-robot';
+import helper from './helper';
 
 class ElementMoveHandler {
     constructor(){
@@ -46,7 +47,7 @@ class ElementMoveHandler {
 
     getMovedPosition = () => {
         const data = {oldPosition: this.elementOldSettings, newPosition: this.getElementCssSettings(this.selectedMovableElement)};
-        data.editUrl = window.location.href;
+        data.editUrl = helper.getCurrentUrl();
         return data;
     };
 

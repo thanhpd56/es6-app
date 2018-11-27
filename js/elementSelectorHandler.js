@@ -127,24 +127,6 @@ class ElementSelectorHandler {
         }).show();
     };
 
-    clickEvents = () => {
-        const eventWrapper = $('body');
-
-        eventWrapper.on('click', '.select-element-menu-close',  () => {
-            this.closeElementMenu();
-        });
-
-        eventWrapper.on('click', '.element-move', () => {
-            this.moveElement();
-        });
-
-
-    };
-
-    moveElement = () => {
-        pm.send(this.pmTarget, 'prepareElementForMove', this.selectedElement)
-    };
-
     closeElementMenu = () => {
         this.removeMenu();
         this.removeOverlay();

@@ -65,8 +65,28 @@ class Customization {
 
     initElements = () => {
         elementSelectorHandler.addOverlay();
-        elementSelectorHandler.clickEvents();
         elementSelectorHandler.setEvents();
+        this.clickEvents();
+    };
+    clickEvents = () => {
+        const eventWrapper = $('body');
+
+        eventWrapper.on('click', '.select-element-menu-close',  () => {
+            this.closeElementMenu();
+        });
+
+        eventWrapper.on('click', '.element-move', () => {
+            this.moveElement();
+        });
+
+        eventWrapper.on('click', '.element-remove', () => {
+            this.removeElement();
+        });
+
+    };
+
+    moveElement = () => {
+        pm.send(this.pmTarget, 'prepareElementForMove', elementSelectorHandler.selectedElement)
     };
 
     setElementMovedPosition = (data) => {
@@ -140,7 +160,14 @@ class Customization {
     closeElementMenu = () => {
         elementSelectorHandler.removeMenu();
         elementSelectorHandler.removeOverlay();
-    }
+    };
+
+    removeElement = () => {
+        const data = {};
+        data.type = 'remove';
+
+        this.setChange(data);
+    };
 }
 
 export default new Customization();

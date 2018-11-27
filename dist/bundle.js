@@ -116,75 +116,6 @@ var ElementSelectorHandler = function ElementSelectorHandler() {
         }).show();
     };
 
-    this.clickEvents = function () {
-        var eventWrapper = (0, _jquery2.default)('body');
-
-        eventWrapper.on('click', '.select-element-menu-close', function () {
-            _this.closeElementMenu();
-        });
-
-        /*eventWrapper.on('click', '.edit-text', function () {
-            that.openFancyBox('edit-text', {'height': '450'});
-        });
-          eventWrapper.on('click', '.edit-attr', function () {
-            that.openFancyBox('edit-attribute', {'height': '500'});
-        });
-          eventWrapper.on('click', '.change-image', function () {
-            that.openFancyBox('change-image', {'height': '300', 'width': '600'});
-        });
-          eventWrapper.on('click', '.edit-hyper-link', function () {
-            that.openFancyBox('hyperlink', {'height': '325', 'width': '600'});
-        });
-          eventWrapper.on('click', '.make-hyper-link', function () {
-            that.openFancyBox('hyperlink', {'height': '325', 'width': '600'});
-        });
-          eventWrapper.on('click', '.edit-style', function () {
-            that.openFancyBox('css-settings');
-        });
-          eventWrapper.on('click', '.element-remove', function () {
-            that.removeElement();
-        });
-          eventWrapper.on('click', '.element-rearrange', function () {
-            that.rearrangeElement();
-        });
-          eventWrapper.on('click', '.element-move', function () {
-            that.moveElement();
-        });
-          eventWrapper.on('click', '.insert-html', function () {
-            that.openFancyBox('insert-html', {'height': '500'});
-        });
-          eventWrapper.on('click', '.insert-image', function () {
-            that.openFancyBox('insert-image', {'height': '400', 'width': '850'});
-        });
-          eventWrapper.on('click', '.slider-settings', function () {
-            that.openFancyBox('slider-settings');
-        });
-          eventWrapper.on('click', '.show-element', function () {
-            ActionBuilder.ElementSelector_Helper.pageOverlay();
-              var selectorString = $(this).attr('data-selector');
-              ActionBuilder.sendPM({
-                target: that.pmTarget,
-                type: 'scrollToElement',
-                data: selectorString,
-                success: function (response) {
-                    if (response == false) {
-                        alert($dictionary['element-cannot-be-found']);
-                    }
-                }
-            });
-        });
-          eventWrapper.on('click', '.go-and-show-element', function () {
-            var url = $(this).attr('data-url');
-            ActionBuilder.IframeHandler_Helper.redirect(url);
-        });
-          eventWrapper.on('click', '.track-element', function () {
-            this.trackElement();
-        }.bind(this));
-          eventWrapper.on('click', '.track-slider', function () {
-            this.trackSlider();
-        }.bind(this));*/
-    };
-
     this.closeElementMenu = function () {
         _this.removeMenu();
         _this.removeOverlay();
@@ -212,16 +143,19 @@ var ElementSelectorHandler = function ElementSelectorHandler() {
     };
 
     console.log('init main element selector handler');
+    this.pmTarget = null;
 };
 
 exports.default = new ElementSelectorHandler();
 
-},{"jquery":4,"jquery-ui":3}],2:[function(require,module,exports){
+},{"jquery":4,"jquery-ui":3,"post-robot":6}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _readingTime = require('reading-time');
 
@@ -249,42 +183,170 @@ window.calcRT = function (ev) {
     document.getElementById("readingTime").innerText = stats + 'thanh';
 };
 
-var Customization = function Customization() {
-    var _this = this;
+var Customization = function () {
+    function Customization() {
+        var _this = this;
 
-    _classCallCheck(this, Customization);
+        _classCallCheck(this, Customization);
 
-    this.setupListeners = function () {
-        _postRobot2.default.on('elementSelected', function (event) {
-            var selectedElement = event.data;
-            _elementSelectorHandler2.default.handleElementSelected(selectedElement);
+        this.camp = {
+            id: 1
+        };
+        this.customizationTypes = {
+            'css': { 'function': 'setCssSettings' },
+            'click': { 'function': 'setClickSettings' },
+            'remove': { 'function': 'removeElement', 'closeMenu': true },
+            'changedText': { 'function': 'setChangedText' },
+            'changedImage': { 'function': 'setChangedImage' },
+            'insertedHTML': { 'function': 'setInsertHTML' },
+            'insertImage': { 'function': 'setInsertImage' },
+            'editHyperLink': { 'function': 'setEditHyperLink' },
+            'makeHyperLink': { 'function': 'setMakeHyperLink' },
+            'elementAttr': { 'function': 'setElementAttr' },
+            'slide': { 'function': 'setSlideSettings' },
+            'rearrangeElement': { 'function': 'setRearrangePosition' },
+            'moveElement': { 'function': 'setMovePosition' }
+        };
+        this.pmTarget = null;
+        this.customizationList = [];
+
+        this.setupListeners = function () {
+            _postRobot2.default.on('elementSelected', function (event) {
+                var selectedElement = event.data;
+                _elementSelectorHandler2.default.handleElementSelected(selectedElement);
+            });
+            _postRobot2.default.on('setCustomMenu', function (event) {
+                var selectedElement = event.data;
+                _elementSelectorHandler2.default.setCustomMenu(selectedElement);
+            });
+
+            _postRobot2.default.on('removePageOverlay', function () {
+                return _elementSelectorHandler2.default.removeOverlay();
+            });
+
+            _postRobot2.default.on('removeMenu', _elementSelectorHandler2.default.removeMenu);
+
+            _postRobot2.default.on('setElementMovedPosition', function (event) {
+                return _this.setElementMovedPosition(event.data);
+            });
+        };
+
+        this.initElements = function () {
+            _elementSelectorHandler2.default.addOverlay();
+            _elementSelectorHandler2.default.setEvents();
+            _this.clickEvents();
+        };
+
+        this.clickEvents = function () {
+            var eventWrapper = (0, _jquery2.default)('body');
+
+            eventWrapper.on('click', '.select-element-menu-close', function () {
+                _this.closeElementMenu();
+            });
+
+            eventWrapper.on('click', '.element-move', function () {
+                _this.moveElement();
+            });
+
+            eventWrapper.on('click', '.element-remove', function () {
+                _this.removeElement();
+            });
+        };
+
+        this.moveElement = function () {
+            _postRobot2.default.send(_this.pmTarget, 'prepareElementForMove', _elementSelectorHandler2.default.selectedElement);
+        };
+
+        this.setElementMovedPosition = function (data) {
+            data.type = 'moveElement';
+            _this.setChange(data);
+        };
+
+        this.setChange = function (customization) {
+            var selectedElement = _elementSelectorHandler2.default.selectedElement;
+            customization.selectorString = selectedElement.selectorString;
+            customization.id = _this.createElementClass();
+            customization.parentNodeSelector = selectedElement.parentNodeSelector;
+            customization.parentNodeHTML = selectedElement.parentNodeHTML;
+
+            _this.applyCustomization(customization, 'new');
+        };
+
+        this.getCustomizationSettings = function (type) {
+            return _this.customizationTypes[type];
+        };
+
+        this.applyCustomization = function (customization, changeType, customIndex) {
+            var setting = _this.getCustomizationSettings(customization.type);
+
+            if (typeof setting === 'undefined') {
+                return false;
+            }
+
+            _postRobot2.default.send(_this.pmTarget, setting.function, customization).then(function (data) {
+                if (changeType === 'new') {
+                    _this.customizationList.push(data);
+                } else if (changeType === 'update') {
+                    _this.customizationList[customIndex] = data;
+                }
+
+                if (typeof setting.closeMenu === 'undefined' || setting.closeMenu === true) {
+                    _this.closeElementMenu();
+                }
+            }).catch(function (err) {
+                console.log('that bai roi');
+            });
+
+            /*ActionBuilder.sendPM({
+                target: that.pmTarget,
+                type: setting.function,
+                data: customization,
+                success: function (data) {
+                    if (changeType === 'new') {
+                        that.customizationList.push(data);
+                    }
+                    else if (changeType == 'update') {
+                        that.customizationList[customIndex] = data;
+                    }
+                     that.updateHistoryList();
+                    ActionBuilder.MenuHandler_Helper.activeUndo();
+                     if (typeof setting.closeMenu === 'undefined' || setting.closeMenu === true) {
+                        that.closeElementMenu();
+                    }
+                }
+            });*/
+        };
+
+        this.closeElementMenu = function () {
+            _elementSelectorHandler2.default.removeMenu();
+            _elementSelectorHandler2.default.removeOverlay();
+        };
+
+        this.removeElement = function () {
+            var data = {};
+            data.type = 'remove';
+
+            _this.setChange(data);
+        };
+
+        (0, _jquery2.default)(document).ready(function () {
+            _this.pmTarget = (0, _jquery2.default)('#edit-frame')[0].contentWindow;
+            _elementSelectorHandler2.default.pmTarget = _this.pmTarget;
+            _this.initElements();
+            _this.setupListeners();
+            _postRobot2.default.send(_this.pmTarget, 'setEditMode');
         });
-        _postRobot2.default.on('setCustomMenu', function (event) {
-            var selectedElement = event.data;
-            _elementSelectorHandler2.default.setCustomMenu(selectedElement);
-        });
+    }
 
-        _postRobot2.default.on('removePageOverlay', function () {
-            return _elementSelectorHandler2.default.removeOverlay();
-        });
+    _createClass(Customization, [{
+        key: 'createElementClass',
+        value: function createElementClass() {
+            return 'sp-custom-' + this.camp.id + '-' + new Date().getTime();
+        }
+    }]);
 
-        _postRobot2.default.on('removeMenu', _elementSelectorHandler2.default.removeMenu);
-    };
-
-    this.initElements = function () {
-        _elementSelectorHandler2.default.addOverlay();
-        _elementSelectorHandler2.default.clickEvents();
-        _elementSelectorHandler2.default.setEvents();
-    };
-
-    (0, _jquery2.default)(document).ready(function () {
-        var pmTarget = (0, _jquery2.default)('#edit-frame')[0].contentWindow;
-        _elementSelectorHandler2.default.pmTarget = pmTarget;
-        _this.initElements();
-        _this.setupListeners();
-        _postRobot2.default.send(pmTarget, 'setEditMode');
-    });
-};
+    return Customization;
+}();
 
 exports.default = new Customization();
 
