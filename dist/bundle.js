@@ -24,20 +24,174 @@ var ElementSelectorHandler = function ElementSelectorHandler() {
         }).appendTo('body');
     };
 
+    this.removeOverlay = function () {
+        _this.selectElementOverlay.hide();
+    };
+
     this.handleElementSelected = function (selectedElement) {
         _this.selectedElement = selectedElement;
         _this.pageOverlay();
     };
 
     this.pageOverlay = function () {
-        console.log('show overlay');
         _this.selectElementOverlay.show();
     };
 
+    this.setCustomMenu = function (data) {
+        var parentMenu = void 0;
+        // set slider images
+        this.sliderImages = data.sliderImages;
+
+        (0, _jquery2.default)('#element-tagName').text(data.tagName);
+
+        // seçilen element slider ise
+
+        (0, _jquery2.default)('.slider-settings').hide();
+        (0, _jquery2.default)('.track-slider').hide();
+        (0, _jquery2.default)('.track-element').show();
+
+        if (data.imgSrc !== undefined) {
+            (0, _jquery2.default)('.change-image').show();
+        } else {
+            (0, _jquery2.default)('.change-image').hide();
+        }
+
+        if (data.editHyperLink) {
+            (0, _jquery2.default)('.edit-hyper-link').show();
+            (0, _jquery2.default)('.make-hyper-link').hide();
+        } else if (data.makeHyperLink) {
+            (0, _jquery2.default)('.edit-hyper-link').hide();
+            (0, _jquery2.default)('.make-hyper-link').show();
+        } else {
+            (0, _jquery2.default)('.edit-hyper-link').hide();
+            (0, _jquery2.default)('.make-hyper-link').hide();
+        }
+
+        if (data.children && data.children.length > 0 || data.tagName === 'img' || data.tagName === 'input') {
+            (0, _jquery2.default)('.edit-text').hide();
+        } else {
+            (0, _jquery2.default)('.edit-text').show();
+        }
+
+        // parents selector menu
+        (0, _jquery2.default)('#element-parents .subMenu').empty();
+        var parentCount = 0;
+        _jquery2.default.each(data.parents, function (i, v) {
+            if (v.tagName === 'BODY' || v.tagName === 'HTML' || i === 0) {
+                // 0. index elementin kendisi
+                return; // continue
+            }
+
+            var parentMenu = document.createElement('span');
+            (0, _jquery2.default)(parentMenu).addClass('subMenuText').addClass('sub-element-select').html(v.tagName).attr('data-selector', v.selectorString).appendTo('#element-parents .subMenu');
+
+            parentCount++;
+        });
+
+        if (parentCount < 1) {
+            parentMenu = document.createElement('span');
+            (0, _jquery2.default)(parentMenu).addClass('subMenuText').html('None').appendTo('#element-parents .subMenu');
+        }
+
+        // children selector menu
+        (0, _jquery2.default)('#element-children .subMenu').empty();
+        _jquery2.default.each(data.children, function (i, v) {
+
+            var parentMenu = document.createElement('span');
+            (0, _jquery2.default)(parentMenu).addClass('subMenuText').addClass('sub-element-select').html(v.tagName).attr('data-selector', v.selectorString).appendTo('#element-children .subMenu');
+        });
+
+        if (data.children < 1) {
+            parentMenu = document.createElement('span');
+            (0, _jquery2.default)(parentMenu).addClass('subMenuText').html('None').appendTo('#element-children .subMenu');
+        }
+        console.log('show menu please');
+        (0, _jquery2.default)('#select-element-menu').css({
+            position: "absolute",
+            top: data.position.y,
+            left: data.position.x
+        }).show();
+    };
+
+    this.clickEvents = function () {
+        var eventWrapper = (0, _jquery2.default)('body');
+
+        eventWrapper.on('click', '.select-element-menu-close', function () {
+            _this.closeElementMenu();
+        });
+
+        /*eventWrapper.on('click', '.edit-text', function () {
+            that.openFancyBox('edit-text', {'height': '450'});
+        });
+          eventWrapper.on('click', '.edit-attr', function () {
+            that.openFancyBox('edit-attribute', {'height': '500'});
+        });
+          eventWrapper.on('click', '.change-image', function () {
+            that.openFancyBox('change-image', {'height': '300', 'width': '600'});
+        });
+          eventWrapper.on('click', '.edit-hyper-link', function () {
+            that.openFancyBox('hyperlink', {'height': '325', 'width': '600'});
+        });
+          eventWrapper.on('click', '.make-hyper-link', function () {
+            that.openFancyBox('hyperlink', {'height': '325', 'width': '600'});
+        });
+          eventWrapper.on('click', '.edit-style', function () {
+            that.openFancyBox('css-settings');
+        });
+          eventWrapper.on('click', '.element-remove', function () {
+            that.removeElement();
+        });
+          eventWrapper.on('click', '.element-rearrange', function () {
+            that.rearrangeElement();
+        });
+          eventWrapper.on('click', '.element-move', function () {
+            that.moveElement();
+        });
+          eventWrapper.on('click', '.insert-html', function () {
+            that.openFancyBox('insert-html', {'height': '500'});
+        });
+          eventWrapper.on('click', '.insert-image', function () {
+            that.openFancyBox('insert-image', {'height': '400', 'width': '850'});
+        });
+          eventWrapper.on('click', '.slider-settings', function () {
+            that.openFancyBox('slider-settings');
+        });
+          eventWrapper.on('click', '.show-element', function () {
+            ActionBuilder.ElementSelector_Helper.pageOverlay();
+              var selectorString = $(this).attr('data-selector');
+              ActionBuilder.sendPM({
+                target: that.pmTarget,
+                type: 'scrollToElement',
+                data: selectorString,
+                success: function (response) {
+                    if (response == false) {
+                        alert($dictionary['element-cannot-be-found']);
+                    }
+                }
+            });
+        });
+          eventWrapper.on('click', '.go-and-show-element', function () {
+            var url = $(this).attr('data-url');
+            ActionBuilder.IframeHandler_Helper.redirect(url);
+        });
+          eventWrapper.on('click', '.track-element', function () {
+            this.trackElement();
+        }.bind(this));
+          eventWrapper.on('click', '.track-slider', function () {
+            this.trackSlider();
+        }.bind(this));*/
+    };
+
+    this.closeElementMenu = function () {
+        _this.removeMenu();
+        _this.removeOverlay();
+    };
+
+    this.removeMenu = function () {
+        (0, _jquery2.default)('#select-element-menu').hide();
+    };
+
     console.log('init main element selector handler');
-    this.selectElementOverlay = (0, _jquery2.default)('<div/>', {
-        id: 'selectElementOverlay'
-    }).appendTo('body');
 };
 
 exports.default = new ElementSelectorHandler();
@@ -63,21 +217,27 @@ var _elementSelectorHandler2 = _interopRequireDefault(_elementSelectorHandler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _jquery2.default)(document).ready(function () {
-    console.log('document is ready');
-    console.log((0, _jquery2.default)('#edit-frame').attr('src'));
-    (0, _jquery2.default)('#myid').addClass('selected');
-
-    (0, _jquery2.default)('li').eq(1).click(function () {
-        (0, _jquery2.default)('#myid').addClass('highlight');
-    });
-    _postRobot2.default.send((0, _jquery2.default)('#edit-frame')[0].contentWindow, 'setEditMode');
+function init() {
     _elementSelectorHandler2.default.addOverlay();
+    _elementSelectorHandler2.default.clickEvents();
+    _postRobot2.default.send((0, _jquery2.default)('#edit-frame')[0].contentWindow, 'setEditMode');
+}
+
+function setupListeners() {
     _postRobot2.default.on('elementSelected', function (event) {
         var selectedElement = event.data;
         _elementSelectorHandler2.default.handleElementSelected(selectedElement);
-        console.log(event);
     });
+    _postRobot2.default.on('setCustomMenu', function (event) {
+        console.log('show custom menu');
+        var selectedElement = event.data;
+        _elementSelectorHandler2.default.setCustomMenu(selectedElement);
+    });
+}
+
+(0, _jquery2.default)(document).ready(function () {
+    init();
+    setupListeners();
 });
 
 window.calcRT = function (ev) {
