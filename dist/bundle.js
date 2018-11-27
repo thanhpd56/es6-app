@@ -219,6 +219,10 @@ exports.default = new ElementSelectorHandler();
 },{"jquery":4,"jquery-ui":3}],2:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _readingTime = require('reading-time');
 
 var _readingTime2 = _interopRequireDefault(_readingTime);
@@ -237,40 +241,52 @@ var _elementSelectorHandler2 = _interopRequireDefault(_elementSelectorHandler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function initElements() {
-    _elementSelectorHandler2.default.addOverlay();
-    _elementSelectorHandler2.default.clickEvents();
-    _elementSelectorHandler2.default.setEvents();
-}
-
-function setupListeners() {
-    _postRobot2.default.on('elementSelected', function (event) {
-        var selectedElement = event.data;
-        _elementSelectorHandler2.default.handleElementSelected(selectedElement);
-    });
-    _postRobot2.default.on('setCustomMenu', function (event) {
-        var selectedElement = event.data;
-        _elementSelectorHandler2.default.setCustomMenu(selectedElement);
-    });
-
-    _postRobot2.default.on('removePageOverlay', function () {
-        return _elementSelectorHandler2.default.removeOverlay();
-    });
-
-    _postRobot2.default.on('removeMenu', _elementSelectorHandler2.default.removeMenu);
-}
-
-(0, _jquery2.default)(document).ready(function () {
-    initElements();
-    setupListeners();
-    _postRobot2.default.send((0, _jquery2.default)('#edit-frame')[0].contentWindow, 'setEditMode');
-});
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 window.calcRT = function (ev) {
     var stats = (0, _readingTime2.default)(ev.value).text;
 
     document.getElementById("readingTime").innerText = stats + 'thanh';
 };
+
+var Customization = function Customization() {
+    var _this = this;
+
+    _classCallCheck(this, Customization);
+
+    this.setupListeners = function () {
+        _postRobot2.default.on('elementSelected', function (event) {
+            var selectedElement = event.data;
+            _elementSelectorHandler2.default.handleElementSelected(selectedElement);
+        });
+        _postRobot2.default.on('setCustomMenu', function (event) {
+            var selectedElement = event.data;
+            _elementSelectorHandler2.default.setCustomMenu(selectedElement);
+        });
+
+        _postRobot2.default.on('removePageOverlay', function () {
+            return _elementSelectorHandler2.default.removeOverlay();
+        });
+
+        _postRobot2.default.on('removeMenu', _elementSelectorHandler2.default.removeMenu);
+    };
+
+    this.initElements = function () {
+        _elementSelectorHandler2.default.addOverlay();
+        _elementSelectorHandler2.default.clickEvents();
+        _elementSelectorHandler2.default.setEvents();
+    };
+
+    (0, _jquery2.default)(document).ready(function () {
+        var pmTarget = (0, _jquery2.default)('#edit-frame')[0].contentWindow;
+        _elementSelectorHandler2.default.pmTarget = pmTarget;
+        _this.initElements();
+        _this.setupListeners();
+        _postRobot2.default.send(pmTarget, 'setEditMode');
+    });
+};
+
+exports.default = new Customization();
 
 },{"./elementSelectorHandler":1,"jquery":4,"post-robot":6,"reading-time":7}],3:[function(require,module,exports){
 var jQuery = require('jquery');
