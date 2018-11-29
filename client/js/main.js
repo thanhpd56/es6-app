@@ -43,6 +43,10 @@ class Main {
         pm.on('setChangedImage', (event) => {
             this.setChangedImage(event.data);
         });
+
+        pm.on('setElementAttr ', (event) => {
+            this.setElementAttr(event.data);
+        });
     };
 
     removeElement = (data) => {
@@ -124,6 +128,23 @@ class Main {
             }
             data.oldText = $(data.selectorString).html();
             $(data.selectorString).html(data.linkText);
+        }
+        return data;
+    };
+
+    setElementAttr = (data) => {
+        if (typeof data.editUrl === "undefined") {
+            data.editUrl = helper.getCurrentUrl();
+        }
+        if ($(data.selectorString).length > 0) {
+            $(data.attrs).each(function (i, v) {
+                if (v.type === 'changed' || v.type === 'added') {
+                    $(data.selectorString).attr(v.key, v.val);
+                }
+                else if (v.type === 'deleted') {
+                    $(data.selectorString).removeAttr(v.key);
+                }
+            });
         }
         return data;
     };
