@@ -39,6 +39,7 @@
   },
   "homepage": "https://github.com/BalasubramaniM/es6-app#readme",
   "dependencies": {
+    "@fancyapps/fancybox": "fancyapps/fancybox",
     "browserify": "^16.2.2",
     "jquery": "2.2.4",
     "jquery-ui": "1.10.5",

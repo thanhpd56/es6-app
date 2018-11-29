@@ -1,7 +1,9 @@
 import readingTime from "reading-time";
 import pm from 'post-robot';
 import $ from 'jquery';
+import '@fancyapps/fancybox';
 import elementSelectorHandler from './elementSelectorHandler';
+
 
 window.calcRT = ev => {
 	var stats = readingTime(ev.value).text;
@@ -83,6 +85,11 @@ class Customization {
             this.removeElement();
         });
 
+        eventWrapper.on('click', '.edit-text', () => {
+            this.openFancyBox('edit-text', {'height': '450'});
+        });
+
+
     };
 
     moveElement = () => {
@@ -135,6 +142,8 @@ class Customization {
 
         });
 
+        console.log(this.customizationList);
+
         /*ActionBuilder.sendPM({
             target: that.pmTarget,
             type: setting.function,
@@ -168,6 +177,42 @@ class Customization {
 
         this.setChange(data);
     };
+
+    openFancyBox(parameter, dimensions) {
+        // default fancybox sizes
+        let height = 600;
+        let width = 960;
+
+        if (dimensions) {
+            if (typeof dimensions.width !== 'undefined') {
+                width = dimensions.width;
+            }
+
+            if (typeof dimensions.height !== 'undefined') {
+                height = dimensions.height;
+            }
+        }
+
+        $.fancybox({
+            padding: 0,
+            margin: 0,
+            type: 'iframe',
+            autoSize: false,
+            width: width,
+            height: height,
+            href: url,
+            openSpeed: 'normal',
+            closeSpeed: 'fast',
+            openEffect: 'none',
+            closeEffect: 'none',
+            beforeShow: function () {
+                elementSelectorHandler.removeMenu();
+            },
+            afterShow: function () {
+                elementSelectorHandler.removeOverlay();
+            }
+        });
+    }
 }
 
 export default new Customization();

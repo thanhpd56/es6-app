@@ -377,6 +377,8 @@ class ElementSelectorHandler {
             height: elementData.height
         });
 
+        event.stopPropagation();
+        event.preventDefault();
         pm.send(window.parent, 'elementSelected', elementData);
         pm.send(window.parent, 'setCustomMenu', elementData);
         console.log(elementData);
