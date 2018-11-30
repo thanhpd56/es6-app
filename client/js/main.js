@@ -4,6 +4,8 @@ import elementSelectorHandler from './elementSelectorHandler';
 import elementMoveHandler from './elementMoveHandler';
 import helper from './helper';
 
+const CUSTOMER_STYLE_ID = 'custom_style';
+
 class Main {
     constructor(){
         $(document).ready(() => {
@@ -68,6 +70,9 @@ class Main {
             this.setInteractiveMode();
         });
 
+        pm.on('injectCSS', (event) => {
+            this.injectCSS(event.data);
+        });
     };
 
     removeElement = (data) => {
@@ -261,7 +266,26 @@ class Main {
 
     setInteractiveMode = () => {
         elementSelectorHandler.unsetEventHandlers();
-    }
+    };
+
+    injectCSS = (data) => {
+        const cssString = data.css;
+        const head = document.head || document.getElementsByTagName('head')[0];
+        const customStyle = document.getElementById(CUSTOMER_STYLE_ID);
+        if (customStyle) {
+            head.removeChild(customStyle);
+        }
+
+        const style = document.createElement('style');
+        style.type = "text/css";
+        style.id = CUSTOMER_STYLE_ID;
+        if (style.styleSheet) {
+            style.styleSheet.cssText = cssString;
+        } else {
+            style.appendChild(document.createTextNode(cssString));
+        }
+        head.appendChild(style);
+    };
 }
 
 
