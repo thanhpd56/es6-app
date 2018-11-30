@@ -44,9 +44,23 @@ class Main {
             this.setChangedImage(event.data);
         });
 
-        pm.on('setElementAttr ', (event) => {
+        pm.on('setEditHyperLink', (event) => {
+            this.setEditHyperLink(event.data);
+        });
+
+        pm.on('setElementAttr', (event) => {
             this.setElementAttr(event.data);
         });
+
+        pm.on('setInsertHTML', (event) => {
+            this.setInsertHTML(event.data);
+        });
+
+        pm.on('setInsertImage', (event) => {
+            this.setInsertImage(event.data);
+        });
+
+
     };
 
     removeElement = (data) => {
@@ -100,6 +114,7 @@ class Main {
     };
 
     setEditHyperLink = function (data) {
+        console.log('setEditHyperLink 123');
         if (typeof data.editUrl === "undefined") {
             data.editUrl = helper.getCurrentUrl();
         }
@@ -118,7 +133,7 @@ class Main {
             else {
                 data.oldUrl = $(data.selectorString).closest('a').attr('href');
                 data.oldNewTab = $(data.selectorString).closest('a').attr('target') || '';
-                sQuery(data.selectorString).closest('a').attr('href', data.linkUrl);
+                $(data.selectorString).closest('a').attr('href', data.linkUrl);
                 if (data.newTab === 1) {
                     $(data.selectorString).closest('a').attr('target', '_blank');
                 }
@@ -133,6 +148,7 @@ class Main {
     };
 
     setElementAttr = (data) => {
+        console.log('setElementAttr');
         if (typeof data.editUrl === "undefined") {
             data.editUrl = helper.getCurrentUrl();
         }
@@ -148,6 +164,81 @@ class Main {
         }
         return data;
     };
+
+    setInsertHTML = (data) => {
+        let tempHTML;
+        if (typeof data.editUrl === "undefined") {
+            data.editUrl = helper.getCurrentUrl();
+        }
+        if ($(data.selectorString).length > 0) {
+            data.parentNodeHTML = this.getNodeHMTL(data.parentNodeSelector);
+            const tempElem = $(data.html);
+            if (tempElem.length > 0 || tempElem.children().length > 0) {
+                tempHTML = data.html;
+            }
+            else {
+                tempHTML = '<span>' + data.html + '</span>';
+            }
+            if (data.insertOption === 'after') {
+                $(data.selectorString).after(tempHTML);
+            }
+            else if (data.insertOption === 'before') {
+                $(data.selectorString).before(tempHTML);
+            }
+            else if (data.insertOption === 'append') {
+                if ($(data.selectorString)[0].tagName === 'IMG' || $(data.selectorString)[0].tagName === 'INPUT') {
+                    $(data.selectorString).after(tempHTML);
+                }
+                else {
+                    $(data.selectorString).append(tempHTML);
+                }
+            }
+            else if (data.insertOption === 'prepend') {
+                if ($(data.selectorString)[0].tagName === 'IMG' || $(data.selectorString)[0].tagName === 'INPUT') {
+                    $(data.selectorString).before(tempHTML);
+                }
+                else {
+                    $(data.selectorString).prepend(tempHTML);
+                }
+            }
+        }
+        return data;
+    };
+
+    setInsertImage = (data) => {
+        if (typeof data.editUrl === "undefined") {
+            data.editUrl = helper.getCurrentUrl();
+        }
+        if ($(data.selectorString).length > 0) {
+            data.parentNodeHTML = this.getNodeHMTL(data.parentNodeSelector);
+            const image = $('<img/>', {src: data.src});
+            if (data.insertOption === 'after') {
+                $(data.selectorString).after(image);
+            }
+            else if (data.insertOption === 'before') {
+                $(data.selectorString).before(image);
+            }
+            else if (data.insertOption === 'append') {
+                if ($(data.selectorString)[0].tagName === 'IMG' || sQuery(data.selectorString)[0].tagName === 'INPUT') {
+                    $(data.selectorString).after(image);
+                }
+                else {
+                    $(data.selectorString).append(image);
+                }
+            }
+            else if (data.insertOption === 'prepend') {
+                if ($(data.selectorString)[0].tagName === 'IMG' || $(data.selectorString)[0].tagName === 'INPUT') {
+                    $(data.selectorString).before(image);
+                }
+                else {
+                    $(data.selectorString).prepend(image);
+                }
+            }
+        }
+        return data;
+    };
 }
+
+
 
 export default new Main();
