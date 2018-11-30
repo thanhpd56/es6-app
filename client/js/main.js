@@ -60,6 +60,13 @@ class Main {
             this.setInsertImage(event.data);
         });
 
+        pm.on('setCssSettings', (event) => {
+            this.setCssSettings(event.data);
+        });
+
+        pm.on('setInteractiveMode', () => {
+            this.setInteractiveMode();
+        });
 
     };
 
@@ -205,6 +212,20 @@ class Main {
         return data;
     };
 
+    setCssSettings = (data) => {
+        if (typeof data.editUrl === "undefined") {
+            data.editUrl = helper.getCurrentUrl();
+        }
+        let settings = data.settings;
+        for (let key in  settings) {
+            if (settings.hasOwnProperty(key)) {
+                $(data.selectorString).css(key, settings[key]);
+            }
+        }
+
+        return data;
+    };
+
     setInsertImage = (data) => {
         if (typeof data.editUrl === "undefined") {
             data.editUrl = helper.getCurrentUrl();
@@ -237,6 +258,10 @@ class Main {
         }
         return data;
     };
+
+    setInteractiveMode = () => {
+        elementSelectorHandler.unsetEventHandlers();
+    }
 }
 
 
