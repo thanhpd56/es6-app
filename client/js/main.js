@@ -32,39 +32,39 @@ class Main {
         pm.on('removeElemOverlay', elementSelectorHandler.removeElemOverlay);
 
         pm.on('setMovePosition', (event) => {
-            elementMoveHandler.setMovePosition(event.data);
+            return elementMoveHandler.setMovePosition(event.data);
         });
 
         pm.on('removeElement', (event) => {
-            this.removeElement(event.data);
+            return this.removeElement(event.data);
         });
 
         pm.on('setChangedText', (event) => {
-            this.setChangedText(event.data);
+            return this.setChangedText(event.data);
         });
 
         pm.on('setChangedImage', (event) => {
-            this.setChangedImage(event.data);
+            return this.setChangedImage(event.data);
         });
 
         pm.on('setEditHyperLink', (event) => {
-            this.setEditHyperLink(event.data);
+            return this.setEditHyperLink(event.data);
         });
 
         pm.on('setElementAttr', (event) => {
-            this.setElementAttr(event.data);
+            return this.setElementAttr(event.data);
         });
 
         pm.on('setInsertHTML', (event) => {
-            this.setInsertHTML(event.data);
+            return this.setInsertHTML(event.data);
         });
 
         pm.on('setInsertImage', (event) => {
-            this.setInsertImage(event.data);
+            return this.setInsertImage(event.data);
         });
 
         pm.on('setCssSettings', (event) => {
-            this.setCssSettings(event.data);
+            return this.setCssSettings(event.data);
         });
 
         pm.on('setInteractiveMode', () => {
@@ -77,6 +77,10 @@ class Main {
 
         pm.on('injectJS', (event) => {
             this.injectJS(event.data);
+        });
+
+        pm.on('undoChange', (event) => {
+            this.undoChange(event.data);
         });
     };
 
@@ -306,6 +310,74 @@ class Main {
         js.id = CUSTOM_JS_ID;
         js.text = jsString;
         head.appendChild(js);
+    };
+
+    undoChange = function (customization) {
+        if (customization.type === "slide") {
+            window.location.reload();
+        }
+        else if (customization.type === "css") {
+            const settings = customization.settings;
+            for (let key in  settings) {
+                if (settings.hasOwnProperty(key)) {
+                    $(data.selectorString).css(key, settings[key].defaultVal);
+                }
+            }
+        }
+        else if (customization.type === "remove") {
+            $(customization.selectorString).show();
+        }
+        else if (customization.type === 'changedText') {
+            console.log('changed text', customization.parentNodeHTML);
+            $(customization.parentNodeSelector).html(customization.parentNodeHTML);
+        }
+        else if (customization.type === 'changedImage') {
+            $(customization.selectorString).attr('src', customization.oldSource);
+        }
+        else if (customization.type === 'insertedHTML') {
+            $(customization.parentNodeSelector).html(customization.parentNodeHTML);
+        }
+        else if (customization.type === 'insertImage') {
+            $(customization.parentNodeSelector).html(customization.parentNodeHTML);
+        }
+        else if (customization.type === 'editHyperLink') {
+            if ($(customization.selectorString)[0].tagName === 'A') {
+                $(customization.selectorString).attr('href', customization.oldUrl);
+                $(customization.selectorString).attr('target', customization.oldNewTab);
+            }
+            else {
+                $(customization.selectorString).closest('a').attr('href', customization.oldUrl);
+                $(customization.selectorString).closest('a').attr('target', customization.oldNewTab);
+            }
+            $(customization.selectorString).html(customization.oldText);
+        } else if (customization.type === 'makeHyperLink') {
+            $(customization.selectorString).html(customization.oldText);
+        } else if (customization.type === 'rearrangeElement') {
+            const element = $(customization.newPosition.elementSelector);
+            const oldPositionHelper = $(customization.oldPosition.helperSelector);
+            switch (customization.oldPosition.insertType) {
+                case 'prepend':
+                    oldPositionHelper.prepend(element);
+                    break;
+                case 'after':
+                    oldPositionHelper.after(element);
+                    break;
+            }
+        } else if (customization.type === 'moveElement') {
+            $(customization.selectorString).css(customization.oldPosition);
+        } else if (customization.type === 'elementAttr') {
+            $(customization.attrs).each(function (i, v) {
+                if (v.type === 'changed') {
+                    $(customization.selectorString).attr(v.key, v.oldVal);
+                }
+                else if (v.type === 'added') {
+                    $(customization.selectorString).removeAttr(v.key);
+                }
+                else if (v.type === 'deleted') {
+                    $(customization.selectorString).attr(v.key, v.val);
+                }
+            });
+        }
     };
 }
 
