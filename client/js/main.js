@@ -4,7 +4,8 @@ import elementSelectorHandler from './elementSelectorHandler';
 import elementMoveHandler from './elementMoveHandler';
 import helper from './helper';
 
-const CUSTOMER_STYLE_ID = 'custom_style';
+const CUSTOM_STYLE_ID = 'custom_style';
+const CUSTOM_JS_ID = 'custom_js';
 
 class Main {
     constructor(){
@@ -72,6 +73,10 @@ class Main {
 
         pm.on('injectCSS', (event) => {
             this.injectCSS(event.data);
+        });
+
+        pm.on('injectJS', (event) => {
+            this.injectJS(event.data);
         });
     };
 
@@ -271,20 +276,36 @@ class Main {
     injectCSS = (data) => {
         const cssString = data.css;
         const head = document.head || document.getElementsByTagName('head')[0];
-        const customStyle = document.getElementById(CUSTOMER_STYLE_ID);
+        const customStyle = document.getElementById(CUSTOM_STYLE_ID);
         if (customStyle) {
             head.removeChild(customStyle);
         }
 
         const style = document.createElement('style');
         style.type = "text/css";
-        style.id = CUSTOMER_STYLE_ID;
+        style.id = CUSTOM_STYLE_ID;
         if (style.styleSheet) {
             style.styleSheet.cssText = cssString;
         } else {
             style.appendChild(document.createTextNode(cssString));
         }
         head.appendChild(style);
+    };
+
+    injectJS= (data) => {
+        console.log('inject js 123', data);
+        const jsString = data.js;
+        const head = document.head || document.getElementsByTagName('head')[0];
+        const customStyle = document.getElementById(CUSTOM_JS_ID);
+        if (customStyle) {
+            head.removeChild(customStyle);
+        }
+
+        const js = document.createElement('script');
+        js.type = "text/javascript";
+        js.id = CUSTOM_JS_ID;
+        js.text = jsString;
+        head.appendChild(js);
     };
 }
 
